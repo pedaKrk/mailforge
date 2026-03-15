@@ -1,5 +1,6 @@
 package mailforge.service;
 
+import jakarta.inject.Singleton;
 import mailforge.service.dto.AttachmentDto;
 import mailforge.service.dto.ParsedEmailDto;
 import mailforge.service.error.EmailParsingError;
@@ -17,6 +18,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+@Singleton
 public class EmailParsingServiceImpl implements EmailParsingService{
     @Override
     public ParsedEmailDto parse(InputStream fileStream) throws EmailParsingError {
