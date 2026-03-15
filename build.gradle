@@ -19,6 +19,13 @@ dependencies {
     runtimeOnly("ch.qos.logback:logback-classic")
     testImplementation("io.micronaut:micronaut-http-client")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+
+    // Source: https://mvnrepository.com/artifact/commons-io/commons-io
+    implementation("commons-io:commons-io:2.21.0")
+    // Source: https://mvnrepository.com/artifact/org.apache.james/apache-mime4j-core
+    implementation("org.apache.james:apache-mime4j-core:0.8.13")
+    // Source: https://mvnrepository.com/artifact/org.apache.james/apache-mime4j-dom
+    implementation("org.apache.james:apache-mime4j-dom:0.8.13")
 }
 
 
