@@ -20,7 +20,7 @@ public class PythonProcessServiceImpl implements PythonProcessService{
     public void analyze(ParsedEmailDto parsedEmail) throws InterruptedException, IOException {
         ProcessBuilder pb = new ProcessBuilder(
                 "python",
-                "python/contacts/main.py"
+                "src/main/java/mailforge/python/contacts/main.py"
         );
 
         Process process = pb.start();
