@@ -1,33 +1,70 @@
+import os
+from dotenv import load_dotenv
 import json
 import sys
+from google import genai
+
+load_dotenv()
+client = genai.Client()
+
+
+def build_prompt(text: str) -> str:
+    return f"""
+You are an information extraction system.
+
+Extract all contact information from the following email text.
+
+Return ONLY valid JSON in this format:
+
+{{
+  "contacts": [
+    {{
+      "type": "email|phone",
+      "value": "string",
+      "confidence": float
+    }}
+  ]
+}}
+
+Email:
+\"\"\"
+{text}
+\"\"\"
+"""
+
 
 def main():
     try:
         raw = sys.stdin.read()
 
         if not raw.strip():
-            raise ValueError("No input received")
+            raise ValueError("No JSON input received")
 
-        data = json.loads(raw)
+        payload = json.loads(raw)
 
-        # Debug: einfach zurückgeben + bisschen Info
+        text = payload.get("textBody") or payload.get("htmlBody") or ""
+
+        prompt = build_prompt(text)
+
+        response = client.models.generate_content(
+            model="gemini-3-flash-preview",
+            contents=prompt
+        )
+
+        content = response.text
+
         result = {
             "status": "ok",
-            "receivedSubject": data.get("subject"),
-            "hasTextBody": bool(data.get("textBody")),
-            "hasHtmlBody": bool(data.get("htmlBody")),
-            "attachmentCount": len(data.get("attachments", []))
+            "raw": content
         }
 
         sys.stdout.write(json.dumps(result, ensure_ascii=False))
         sys.stdout.flush()
-
     except Exception as e:
-        error = {
+        sys.stderr.write(json.dumps({
             "status": "error",
             "message": str(e)
-        }
-        sys.stderr.write(json.dumps(error))
+        }, ensure_ascii=False))
         sys.stderr.flush()
         sys.exit(1)
 
