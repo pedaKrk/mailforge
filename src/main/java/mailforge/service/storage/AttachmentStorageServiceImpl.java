@@ -1,9 +1,9 @@
-package mailforge.service.process;
+package mailforge.service.storage;
 
 import jakarta.inject.Singleton;
 import mailforge.service.parse.dto.ParsedAttachmentDto;
-import mailforge.service.process.dto.StoredAttachmentDto;
-import mailforge.service.process.error.AttachmentStorageException;
+import mailforge.service.storage.dto.StoredAttachmentDto;
+import mailforge.service.storage.error.AttachmentStorageException;
 import org.apache.commons.io.FilenameUtils;
 
 import java.io.IOException;
@@ -15,7 +15,7 @@ import java.util.HexFormat;
 import java.util.UUID;
 
 @Singleton
-public class AttachmentStorageServiceImpl implements AttachmentStorageService{
+public class AttachmentStorageServiceImpl implements AttachmentStorageService {
     private final Path baseDirectory = Path.of("build", "mailforge-attachments");
 
     @Override

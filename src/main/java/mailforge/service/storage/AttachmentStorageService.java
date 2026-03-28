@@ -1,8 +1,8 @@
-package mailforge.service.process;
+package mailforge.service.storage;
 
 import mailforge.service.parse.dto.ParsedAttachmentDto;
-import mailforge.service.process.dto.StoredAttachmentDto;
-import mailforge.service.process.error.AttachmentStorageException;
+import mailforge.service.storage.dto.StoredAttachmentDto;
+import mailforge.service.storage.error.AttachmentStorageException;
 
 public interface AttachmentStorageService {
     StoredAttachmentDto store(ParsedAttachmentDto attachment) throws AttachmentStorageException;

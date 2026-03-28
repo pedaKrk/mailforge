@@ -1,4 +1,4 @@
-package mailforge.service.process.dto;
+package mailforge.service.storage.dto;
 
 public record StoredAttachmentDto(
     String attachmentId,

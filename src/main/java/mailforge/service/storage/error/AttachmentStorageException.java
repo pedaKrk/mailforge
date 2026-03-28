@@ -1,4 +1,4 @@
-package mailforge.service.process.error;
+package mailforge.service.storage.error;
 
 public class AttachmentStorageException extends Exception {
     public AttachmentStorageException(String message) {
