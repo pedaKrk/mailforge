@@ -14,6 +14,7 @@ public record ProcessedAttachmentDto(
         String sha256,
         String storagePath,
         ProcessingMode processingMode,
+        boolean textExtracted,
         boolean ocrApplied,
         String extractedText,
         String warning
