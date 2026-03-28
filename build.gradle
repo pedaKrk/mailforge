@@ -26,6 +26,8 @@ dependencies {
     implementation("org.apache.james:apache-mime4j-core:0.8.13")
     // Source: https://mvnrepository.com/artifact/org.apache.james/apache-mime4j-dom
     implementation("org.apache.james:apache-mime4j-dom:0.8.13")
+    // Source: https://mvnrepository.com/artifact/org.apache.pdfbox/pdfbox
+    implementation("org.apache.pdfbox:pdfbox:3.0.7")
 }
 
 
