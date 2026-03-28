@@ -7,7 +7,7 @@ import mailforge.service.process.ProcessingModeResolver;
 import mailforge.service.process.dto.ProcessedAttachmentDto;
 import mailforge.service.process.dto.ProcessingMode;
 import mailforge.service.process.error.AttachmentProcessingException;
-import mailforge.service.process.error.TextExtractionException;
+import mailforge.service.process.error.ExtractionException;
 import mailforge.service.storage.AttachmentStorageService;
 import mailforge.service.storage.dto.StoredAttachmentDto;
 import mailforge.service.storage.error.AttachmentStorageException;
@@ -18,11 +18,13 @@ public class AttachmentProcessingServiceImpl implements AttachmentProcessingServ
     private final AttachmentStorageService storageService;
     private final ProcessingModeResolver processingModeResolver;
     private final TextExtractionService textExtractionService;
+    private final PdfExtractionService pdfExtractionService;
 
-    public AttachmentProcessingServiceImpl(AttachmentStorageService storageService, ProcessingModeResolver processingModeResolver, TextExtractionService textExtractionService) {
+    public AttachmentProcessingServiceImpl(AttachmentStorageService storageService, ProcessingModeResolver processingModeResolver, TextExtractionService textExtractionService, PdfExtractionService pdfExtractionService) {
         this.storageService = storageService;
         this.processingModeResolver = processingModeResolver;
         this.textExtractionService = textExtractionService;
+        this.pdfExtractionService = pdfExtractionService;
     }
 
     @Override
@@ -38,10 +40,16 @@ public class AttachmentProcessingServiceImpl implements AttachmentProcessingServ
                     String text = textExtractionService.extract(storedAttachment);
                     yield buildResult(storedAttachment, ProcessingMode.TEXT, true, false, text, null);
                 }
-                case PDF -> buildResult(storedAttachment, ProcessingMode.PDF, true, false, null, "not implemented");
+                case PDF -> {
+                    String text = pdfExtractionService.extract(storedAttachment);
+                    if(!text.isEmpty()) {
+                        yield buildResult(storedAttachment, ProcessingMode.PDF, true, false, null, null);
+                    }
+                    yield buildResult(storedAttachment, ProcessingMode.PDF, false, true, null, "not implemented");
+                }
                 case OCR -> buildResult(storedAttachment, ProcessingMode.PDF, false, true, null, "not implemented");
             };
-        } catch (AttachmentStorageException | TextExtractionException e) {
+        } catch (AttachmentStorageException | ExtractionException e) {
             throw new AttachmentProcessingException("Error while processing Attachment: " + e.getMessage(), e);
         }
     }
