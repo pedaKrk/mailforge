@@ -13,6 +13,7 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
+// Todo: mehr von RTX verwenden
 @Singleton
 public class BodyParserImpl implements BodyParser {
 
