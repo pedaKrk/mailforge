@@ -1,4 +1,4 @@
-package mailforge.service.dto;
+package mailforge.service.parse.dto;
 
 import io.micronaut.core.annotation.Introspected;
 import io.micronaut.serde.annotation.Serdeable;
@@ -17,5 +17,5 @@ public record ParsedEmailDto(
         String sentDate,
         String textBody,
         String htmlBody,
-        List<AttachmentDto> attachments
+        List<ParsedAttachmentDto> attachments
 ) {}

@@ -1,4 +1,4 @@
-package mailforge.service.error;
+package mailforge.service.parse.error;
 
 public class EmailParsingError extends Exception {
     public EmailParsingError(String message) {

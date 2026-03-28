@@ -5,10 +5,10 @@ import io.micronaut.http.MediaType;
 import io.micronaut.http.annotation.*;
 import io.micronaut.http.multipart.CompletedFileUpload;
 import jakarta.inject.Inject;
-import mailforge.service.EmailParsingService;
+import mailforge.service.parse.EmailParsingService;
 import mailforge.service.PythonProcessService;
-import mailforge.service.dto.ParsedEmailDto;
-import mailforge.service.error.EmailParsingError;
+import mailforge.service.parse.dto.ParsedEmailDto;
+import mailforge.service.parse.error.EmailParsingError;
 import org.apache.commons.io.FilenameUtils;
 
 import java.io.InputStream;
@@ -37,6 +37,27 @@ public class EmailController {
         }
     }
 
+    @Post(value = "/analyze", consumes = MediaType.MULTIPART_FORM_DATA, produces = MediaType.APPLICATION_JSON)
+    public HttpResponse<?> analyze(CompletedFileUpload file) {
+        if(file == null || file.getSize() == 0) {
+            return HttpResponse.badRequest("No file uploaded");
+        }
+        if (!"eml".equalsIgnoreCase(FilenameUtils.getExtension(file.getFilename()))) {
+            return HttpResponse.badRequest("Only .eml files are supported");
+        }
+
+        try (InputStream inputStream = file.getInputStream()){
+            ParsedEmailDto parsedEmail = emailParsingService.parse(inputStream);
+
+            return HttpResponse.ok();
+        } catch (EmailParsingError e) {
+            return HttpResponse.serverError("Failed to parse email: " + e.getMessage());
+        }
+        catch (Exception e){
+            return HttpResponse.serverError("Failed to analyze  email: " + e.getMessage());
+        }
+    }
+
     @Post(value = "/analyze/contacts", consumes = MediaType.MULTIPART_FORM_DATA, produces = MediaType.APPLICATION_JSON)
     public HttpResponse<?> analyzeContacts(CompletedFileUpload file) {
         if(file == null || file.getSize() == 0) {
@@ -45,7 +66,6 @@ public class EmailController {
         if (!"eml".equalsIgnoreCase(FilenameUtils.getExtension(file.getFilename()))) {
             return HttpResponse.badRequest("Only .eml files are supported");
         }
-
 
         try (InputStream inputStream = file.getInputStream()){
             ParsedEmailDto parsedEmail = emailParsingService.parse(inputStream);

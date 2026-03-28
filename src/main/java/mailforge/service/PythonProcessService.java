@@ -1,6 +1,6 @@
 package mailforge.service;
 
-import mailforge.service.dto.ParsedEmailDto;
+import mailforge.service.parse.dto.ParsedEmailDto;
 
 import java.io.IOException;
 

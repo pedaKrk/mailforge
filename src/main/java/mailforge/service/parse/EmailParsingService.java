@@ -1,7 +1,7 @@
-package mailforge.service;
+package mailforge.service.parse;
 
-import mailforge.service.dto.ParsedEmailDto;
-import mailforge.service.error.EmailParsingError;
+import mailforge.service.parse.dto.ParsedEmailDto;
+import mailforge.service.parse.error.EmailParsingError;
 
 import java.io.InputStream;
 

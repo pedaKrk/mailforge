@@ -2,7 +2,7 @@ package mailforge.service;
 
 import io.micronaut.serde.ObjectMapper;
 import jakarta.inject.Singleton;
-import mailforge.service.dto.ParsedEmailDto;
+import mailforge.service.parse.dto.ParsedEmailDto;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
