@@ -43,11 +43,11 @@ public class AttachmentProcessingServiceImpl implements AttachmentProcessingServ
                 case PDF -> {
                     String text = pdfExtractionService.extract(storedAttachment);
                     if(!text.isEmpty()) {
-                        yield buildResult(storedAttachment, ProcessingMode.PDF, true, false, null, null);
+                        yield buildResult(storedAttachment, ProcessingMode.PDF, true, false, text, null);
                     }
-                    yield buildResult(storedAttachment, ProcessingMode.PDF, false, true, null, "not implemented");
+                    yield buildResult(storedAttachment, ProcessingMode.OCR, false, true, null, "not implemented");
                 }
-                case OCR -> buildResult(storedAttachment, ProcessingMode.PDF, false, true, null, "not implemented");
+                case OCR -> buildResult(storedAttachment, ProcessingMode.OCR, false, true, null, "not implemented");
             };
         } catch (AttachmentStorageException | ExtractionException e) {
             throw new AttachmentProcessingException("Error while processing Attachment: " + e.getMessage(), e);
