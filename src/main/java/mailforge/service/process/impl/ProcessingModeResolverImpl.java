@@ -1,13 +1,14 @@
-package mailforge.service.process;
+package mailforge.service.process.impl;
 
 import io.micronaut.http.MediaType;
 import jakarta.inject.Singleton;
+import mailforge.service.process.ProcessingModeResolver;
 import mailforge.service.process.dto.ProcessingMode;
 import mailforge.service.storage.dto.StoredAttachmentDto;
 import org.apache.commons.io.FilenameUtils;
 
 @Singleton
-public class ProcessingModeResolverImpl implements ProcessingModeResolver{
+public class ProcessingModeResolverImpl implements ProcessingModeResolver {
 
     private static final MediaType IMAGE_ANY = MediaType.of("image/*");
 
