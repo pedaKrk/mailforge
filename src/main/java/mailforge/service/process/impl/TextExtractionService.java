@@ -12,7 +12,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 @Singleton
-@Named("text")
 public class TextExtractionService implements ExtractionService {
     @Override
     public String extract(StoredAttachmentDto attachment) throws TextExtractionException {

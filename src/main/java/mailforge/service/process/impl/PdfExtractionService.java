@@ -14,14 +14,13 @@ import java.io.IOException;
 import java.nio.file.Path;
 
 @Singleton
-@Named("pdf")
 public class PdfExtractionService implements ExtractionService {
     @Override
     public String extract(StoredAttachmentDto attachment) throws ExtractionException {
         try(PDDocument document = Loader.loadPDF(Path.of(attachment.storagePath()).toFile())) {
             PDFTextStripper stripper = new PDFTextStripper();
             String text = stripper.getText(document);
-            return text == null ? "" : text;
+            return text == null ? "" : text.trim();
         } catch (IOException e) {
             throw new PdfExtractionException("Error extracting Text from Pdf: " + e.getMessage(), e);
         }

@@ -19,12 +19,14 @@ public class AttachmentProcessingServiceImpl implements AttachmentProcessingServ
     private final ProcessingModeResolver processingModeResolver;
     private final TextExtractionService textExtractionService;
     private final PdfExtractionService pdfExtractionService;
+    private final OcrExtractionService ocrExtractionService;
 
-    public AttachmentProcessingServiceImpl(AttachmentStorageService storageService, ProcessingModeResolver processingModeResolver, TextExtractionService textExtractionService, PdfExtractionService pdfExtractionService) {
+    public AttachmentProcessingServiceImpl(AttachmentStorageService storageService, ProcessingModeResolver processingModeResolver, TextExtractionService textExtractionService, PdfExtractionService pdfExtractionService, OcrExtractionService ocrExtractionService) {
         this.storageService = storageService;
         this.processingModeResolver = processingModeResolver;
         this.textExtractionService = textExtractionService;
         this.pdfExtractionService = pdfExtractionService;
+        this.ocrExtractionService = ocrExtractionService;
     }
 
     @Override
@@ -38,20 +40,31 @@ public class AttachmentProcessingServiceImpl implements AttachmentProcessingServ
                 case UNSUPPORTED -> buildResult(storedAttachment, ProcessingMode.UNSUPPORTED, false, false, null, "Unsupported attachment type");
                 case TEXT -> {
                     String text = textExtractionService.extract(storedAttachment);
-                    yield buildResult(storedAttachment, ProcessingMode.TEXT, true, false, text, null);
+                    boolean extracted = hasText(text);
+                    yield buildResult(storedAttachment, ProcessingMode.TEXT, extracted, false, text, extracted ? null : "Text extraction returned no text");
                 }
                 case PDF -> {
                     String text = pdfExtractionService.extract(storedAttachment);
-                    if(!text.isEmpty()) {
+                    if(hasText(text)) {
                         yield buildResult(storedAttachment, ProcessingMode.PDF, true, false, text, null);
                     }
-                    yield buildResult(storedAttachment, ProcessingMode.OCR, false, true, null, "not implemented");
+                    String ocrText = ocrExtractionService.extract(storedAttachment);
+                    boolean extracted = hasText(ocrText);
+                    yield buildResult(storedAttachment, ProcessingMode.PDF, extracted, true, ocrText, extracted ? null : "PDF contained no extractable text and OCR returned no text");
                 }
-                case OCR -> buildResult(storedAttachment, ProcessingMode.OCR, false, true, null, "not implemented");
+                case OCR -> {
+                    String ocrText = ocrExtractionService.extract(storedAttachment);
+                    boolean extracted = hasText(ocrText);
+                    yield buildResult(storedAttachment, ProcessingMode.OCR, extracted, true, ocrText, extracted ? null : "OCR returned no text");
+                }
             };
         } catch (AttachmentStorageException | ExtractionException e) {
             throw new AttachmentProcessingException("Error while processing Attachment: " + e.getMessage(), e);
         }
+    }
+
+    private boolean hasText(String text) {
+        return text != null && !text.isBlank();
     }
 
     private ProcessedAttachmentDto buildResult(StoredAttachmentDto storedAttachment, ProcessingMode mode, boolean textExtracted, boolean ocrApplied, String extractedText, String warning){

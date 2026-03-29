@@ -28,6 +28,8 @@ dependencies {
     implementation("org.apache.james:apache-mime4j-dom:0.8.13")
     // Source: https://mvnrepository.com/artifact/org.apache.pdfbox/pdfbox
     implementation("org.apache.pdfbox:pdfbox:3.0.7")
+    // Source: https://mvnrepository.com/artifact/net.sourceforge.tess4j/tess4j
+    implementation("net.sourceforge.tess4j:tess4j:5.18.0")
 }
 
 
