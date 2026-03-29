@@ -20,6 +20,9 @@ dependencies {
     testImplementation("io.micronaut:micronaut-http-client")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 
+    // Source: https://mvnrepository.com/artifact/org.projectlombok/lombok
+    implementation("org.projectlombok:lombok:1.18.44")
+
     // Source: https://mvnrepository.com/artifact/commons-io/commons-io
     implementation("commons-io:commons-io:2.21.0")
     // Source: https://mvnrepository.com/artifact/org.apache.james/apache-mime4j-core

@@ -12,6 +12,9 @@ import mailforge.service.storage.AttachmentStorageService;
 import mailforge.service.storage.dto.StoredAttachmentDto;
 import mailforge.service.storage.error.AttachmentStorageException;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Singleton
 public class AttachmentProcessingServiceImpl implements AttachmentProcessingService {
 
@@ -27,6 +30,15 @@ public class AttachmentProcessingServiceImpl implements AttachmentProcessingServ
         this.textExtractionService = textExtractionService;
         this.pdfExtractionService = pdfExtractionService;
         this.ocrExtractionService = ocrExtractionService;
+    }
+
+    @Override
+    public List<ProcessedAttachmentDto> process(List<ParsedAttachmentDto> attachments) throws AttachmentProcessingException {
+        List<ProcessedAttachmentDto> result = new ArrayList<>();
+        for (var attachment : attachments){
+            result.add(process(attachment));
+        }
+        return result;
     }
 
     @Override

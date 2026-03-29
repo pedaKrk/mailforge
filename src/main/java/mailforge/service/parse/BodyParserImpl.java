@@ -1,6 +1,7 @@
 package mailforge.service.parse;
 
 import jakarta.inject.Singleton;
+import lombok.extern.slf4j.Slf4j;
 import mailforge.service.parse.dto.BodyParserResult;
 import mailforge.service.parse.dto.ParsedAttachmentDto;
 import mailforge.service.parse.error.EmailParsingError;
@@ -14,12 +15,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 // Todo: mehr von RTX verwenden
+@Slf4j
 @Singleton
 public class BodyParserImpl implements BodyParser {
 
     public BodyParserResult parse(Entity entity) throws EmailParsingError {
+        log.debug("Starting body parsing for root entity: mimeType={}, disposition={}, filename={}, multipart={}", entity.getMimeType(), entity.getDispositionType(), entity.getFilename(), entity.isMultipart());
         MutableBodyParserResult result = new MutableBodyParserResult();
         parseInto(entity, result);
+        log.debug("Finished body parsing: textBodyPresent={}, htmlBodyPresent={}, attachmentCount={}", result.textBody != null, result.htmlBody != null, result.attachments.size());
         return result.toImmutable();
     }
 
