@@ -10,9 +10,12 @@ import mailforge.service.parse.dto.ParsedEmailDto;
 import mailforge.service.parse.error.EmailParsingError;
 import mailforge.service.process.AttachmentProcessingService;
 import mailforge.service.process.dto.ProcessedAttachmentDto;
+import mailforge.service.storage.AttachmentStorageService;
+import mailforge.service.storage.dto.StoredAttachmentDto;
 import org.apache.commons.io.FilenameUtils;
 
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller("/email")
@@ -20,11 +23,13 @@ public class EmailController {
 
     private final EmailParsingService emailParsingService;
     private final PythonProcessService pythonProcessService;
+    private final AttachmentStorageService attachmentStorageService;
     private final AttachmentProcessingService attachmentProcessingService;
 
-    public EmailController(EmailParsingService emailParsingService, PythonProcessService pythonProcessService, AttachmentProcessingService attachmentProcessingService) {
+    public EmailController(EmailParsingService emailParsingService, PythonProcessService pythonProcessService, AttachmentStorageService attachmentStorageService, AttachmentProcessingService attachmentProcessingService) {
         this.emailParsingService = emailParsingService;
         this.pythonProcessService = pythonProcessService;
+        this.attachmentStorageService = attachmentStorageService;
         this.attachmentProcessingService = attachmentProcessingService;
     }
 
@@ -55,7 +60,15 @@ public class EmailController {
 
         try (InputStream inputStream = file.getInputStream()){
             ParsedEmailDto parsedEmail = emailParsingService.parse(inputStream);
-            List<ProcessedAttachmentDto> parsedAttachments = attachmentProcessingService.process(parsedEmail.attachments());
+
+            List<ProcessedAttachmentDto> parsedAttachments = new ArrayList<>();
+            for(var attachment : parsedEmail.attachments()){
+                StoredAttachmentDto storedAttachment = attachmentStorageService.store(attachment);
+                ProcessedAttachmentDto processedAttachment = attachmentProcessingService.process(storedAttachment);
+
+                parsedAttachments.add(processedAttachment);
+            }
+
             return HttpResponse.ok(parsedAttachments);
         } catch (EmailParsingError e) {
             return HttpResponse.serverError("Failed to parse email: " + e.getMessage());
