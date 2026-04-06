@@ -11,5 +11,8 @@ public record ParsedAttachmentDto(
         String mimeType,
         long sizeBytes,
         boolean inline,
+        String contentId,
+        String contentDisposition,
+        String contentTransferEncoding,
         byte[] content
 ) {}
