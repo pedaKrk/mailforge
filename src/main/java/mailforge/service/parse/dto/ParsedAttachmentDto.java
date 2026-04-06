@@ -6,9 +6,10 @@ import io.micronaut.serde.annotation.Serdeable;
 @Introspected
 @Serdeable
 public record ParsedAttachmentDto(
+        String attachmentId,
         String filename,
         String mimeType,
-        long size,
+        long sizeBytes,
         boolean inline,
         byte[] content
 ) {}

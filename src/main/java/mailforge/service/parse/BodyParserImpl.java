@@ -13,6 +13,7 @@ import org.apache.james.mime4j.dom.TextBody;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 // Todo: mehr von RTX verwenden
 @Slf4j
@@ -43,6 +44,7 @@ public class BodyParserImpl implements BodyParser {
         if (isAttachment(entity)){
             byte[] data = readBinaryBody(entity);
             result.attachments.add(new ParsedAttachmentDto(
+                    UUID.randomUUID().toString(),
                     filename,
                     mimeType,
                     data.length,

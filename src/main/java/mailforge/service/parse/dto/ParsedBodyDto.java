@@ -3,12 +3,9 @@ package mailforge.service.parse.dto;
 import io.micronaut.core.annotation.Introspected;
 import io.micronaut.serde.annotation.Serdeable;
 
-import java.util.List;
-
 @Introspected
 @Serdeable
-public record ParsedEmailDto(
-        ParsedHeaderDto headers,
-        ParsedBodyDto body,
-        List<ParsedAttachmentDto> attachments
+public record ParsedBodyDto(
+        String textBody,
+        String htmlBody
 ) {}

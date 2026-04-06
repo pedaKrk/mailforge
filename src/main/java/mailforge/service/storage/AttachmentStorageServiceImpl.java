@@ -12,7 +12,6 @@ import java.nio.file.Path;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.HexFormat;
-import java.util.UUID;
 
 @Singleton
 public class AttachmentStorageServiceImpl implements AttachmentStorageService {
@@ -25,17 +24,16 @@ public class AttachmentStorageServiceImpl implements AttachmentStorageService {
                 Files.createDirectories(this.baseDirectory);
             }
 
-            String attachmentId = UUID.randomUUID().toString();
-            Path targetPath = this.baseDirectory.resolve(attachmentId + "." + FilenameUtils.getExtension(attachment.filename()));
+            Path targetPath = this.baseDirectory.resolve(attachment.attachmentId() + "." + FilenameUtils.getExtension(attachment.filename()));
             String sha256 = calculateSha256(attachment.content());
 
             Files.write(targetPath, attachment.content());
 
             return new StoredAttachmentDto(
-                    attachmentId,
+                    attachment.attachmentId(),
                     attachment.filename(),
                     attachment.mimeType(),
-                    attachment.size(),
+                    attachment.sizeBytes(),
                     attachment.inline(),
                     sha256,
                     targetPath.toAbsolutePath().toString()
