@@ -6,11 +6,14 @@ import io.micronaut.serde.annotation.Serdeable;
 @Introspected
 @Serdeable
 public record StoredAttachmentDto(
-    String attachmentId,
-    String originalFilename,
-    String mimeType,
-    long size,
-    boolean inline,
-    String sha256,
-    String storagePath
+        String attachmentId,
+        String filename,
+        String mimeType,
+        long sizeBytes,
+        boolean inline,
+        String contentId,
+        String contentDisposition,
+        String contentTransferEncoding,
+        String sha256,
+        String storagePath
 ) {}
