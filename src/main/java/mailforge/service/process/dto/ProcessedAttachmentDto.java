@@ -7,15 +7,18 @@ import io.micronaut.serde.annotation.Serdeable;
 @Serdeable
 public record ProcessedAttachmentDto(
         String attachmentId,
-        String originalFilename,
+        String filename,
         String mimeType,
-        long size,
+        long sizeBytes,
         boolean inline,
+        String contentId,
+        String contentDisposition,
+        String contentTransferEncoding,
         String sha256,
         String storagePath,
         ProcessingMode processingMode,
-        boolean textExtracted,
+        boolean extractionSuccessful,
         boolean ocrApplied,
         String extractedText,
-        String warning
+        String warnings
 ) {}

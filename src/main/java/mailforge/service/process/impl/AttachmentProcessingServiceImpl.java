@@ -72,20 +72,23 @@ public class AttachmentProcessingServiceImpl implements AttachmentProcessingServ
         return text != null && !text.isBlank();
     }
 
-    private ProcessedAttachmentDto buildResult(StoredAttachmentDto storedAttachment, ProcessingMode mode, boolean textExtracted, boolean ocrApplied, String extractedText, String warning){
+    private ProcessedAttachmentDto buildResult(StoredAttachmentDto storedAttachment, ProcessingMode mode, boolean textExtracted, boolean ocrApplied, String extractedText, String processingWarning){
         return new ProcessedAttachmentDto(
                 storedAttachment.attachmentId(),
-                storedAttachment.originalFilename(),
+                storedAttachment.filename(),
                 storedAttachment.mimeType(),
-                storedAttachment.size(),
+                storedAttachment.sizeBytes(),
                 storedAttachment.inline(),
+                storedAttachment.contentId(),
+                storedAttachment.contentDisposition(),
+                storedAttachment.contentTransferEncoding(),
                 storedAttachment.sha256(),
                 storedAttachment.storagePath(),
                 mode,
                 textExtracted,
                 ocrApplied,
                 extractedText,
-                warning
+                processingWarning
         );
     }
 }
