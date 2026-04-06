@@ -9,6 +9,7 @@ import org.apache.james.mime4j.dom.BinaryBody;
 import org.apache.james.mime4j.dom.Entity;
 import org.apache.james.mime4j.dom.Multipart;
 import org.apache.james.mime4j.dom.TextBody;
+import org.apache.james.mime4j.stream.Field;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -29,6 +30,10 @@ public class BodyParserImpl implements BodyParser {
     }
 
     private void parseInto(Entity entity, MutableBodyParserResult result) throws EmailParsingError {
+        if (entity == null) {
+            return;
+        }
+
         if(entity.isMultipart()){
             Multipart multipart = (Multipart) entity.getBody();
             for(Entity part : multipart.getBodyParts()){
@@ -49,6 +54,9 @@ public class BodyParserImpl implements BodyParser {
                     mimeType,
                     data.length,
                     inline,
+                    getContentId(entity),
+                    entity.getDispositionType(),
+                    entity.getContentTransferEncoding(),
                     data
             ));
             return;
@@ -62,6 +70,18 @@ public class BodyParserImpl implements BodyParser {
                 result.htmlBody = content;
             }
         }
+    }
+
+    private String getContentId(Entity entity){
+        if(entity.getHeader() == null){
+            return null;
+        }
+        Field field = entity.getHeader().getField("Content-ID");
+        if (field == null) {
+            return null;
+        }
+
+        return field.getBody();
     }
 
     private String readTextBody(TextBody textBody) throws EmailParsingError {

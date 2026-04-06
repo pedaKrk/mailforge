@@ -3,17 +3,16 @@ package mailforge.service.parse;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import mailforge.service.parse.dto.BodyParserResult;
+import mailforge.service.parse.dto.ParsedBodyDto;
 import mailforge.service.parse.dto.ParsedEmailDto;
+import mailforge.service.parse.dto.ParsedHeaderDto;
 import mailforge.service.parse.error.EmailParsingError;
 import org.apache.james.mime4j.dom.Message;
 import org.apache.james.mime4j.dom.address.*;
 import org.apache.james.mime4j.message.DefaultMessageBuilder;
 
 import java.io.*;
-import java.time.ZoneOffset;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Singleton
@@ -30,16 +29,26 @@ public class EmailParsingServiceImpl implements EmailParsingService {
             Message message = defaultMessageBuilder.parseMessage(fileStream);
             BodyParserResult bodyParserResult = bodyParser.parse(message);
 
-            return new ParsedEmailDto(
-                    message.getSubject(),
-                    extractFrom(message.getFrom()),
-                    extractAddresses(message.getTo()),
-                    extractAddresses(message.getCc()),
-                    extractAddresses(message.getBcc()),
+            var headers = new ParsedHeaderDto(
                     message.getMessageId(),
-                    extractDate(message.getDate()),
+                    message.getSubject(),
+                    message.getDate().toInstant(),
+                    extractMailbox(message.getSender()),
+                    extractMailboxList(message.getFrom()),
+                    extractAddressList(message.getTo()),
+                    extractAddressList(message.getCc()),
+                    extractAddressList(message.getBcc()),
+                    extractAddressList(message.getReplyTo())
+            );
+
+            var body = new ParsedBodyDto(
                     bodyParserResult.textBody(),
-                    bodyParserResult.htmlBody(),
+                    bodyParserResult.htmlBody()
+            );
+
+            return new ParsedEmailDto(
+                    headers,
+                    body,
                     bodyParserResult.attachments()
             );
         } catch (IOException e) {
@@ -47,14 +56,19 @@ public class EmailParsingServiceImpl implements EmailParsingService {
         }
     }
 
-    private String extractFrom(MailboxList mailboxList){
-        if(mailboxList == null || mailboxList.isEmpty()){
-            return null;
+    private List<String> extractMailboxList(MailboxList mailboxList){
+        List<String> addresses = new ArrayList<>();
+        for(Mailbox mailbox : mailboxList){
+            addresses.add(extractMailbox(mailbox));
         }
-        return mailboxList.getFirst().getAddress();
+        return addresses;
     }
 
-    private List<String> extractAddresses(AddressList addressList){
+    private String extractMailbox(Mailbox mailbox){
+        return mailbox.getAddress();
+    }
+
+    private List<String> extractAddressList(AddressList addressList){
         List<String> result = new ArrayList<>();
         if(addressList == null){
             return result;
@@ -70,12 +84,5 @@ public class EmailParsingServiceImpl implements EmailParsingService {
             }
         }
         return result;
-    }
-
-    private String extractDate(Date date){
-        if(date == null){
-            return null;
-        }
-        return date.toInstant().atOffset(ZoneOffset.UTC).format(DateTimeFormatter.ISO_OFFSET_DATE_TIME);
     }
 }
