@@ -1,5 +1,6 @@
 package mailforge.service.process.impl;
 
+import io.micronaut.context.annotation.Value;
 import jakarta.inject.Singleton;
 import mailforge.service.process.ExtractionService;
 import mailforge.service.process.error.ExtractionException;
@@ -16,9 +17,10 @@ public class OcrExtractionService implements ExtractionService {
 
     private final Tesseract tesseract;
 
-    public OcrExtractionService() {
+    public OcrExtractionService(@Value("${ocr.datapath}") String datapath, @Value("${ocr.language}") String language) {
         this.tesseract = new Tesseract();
-        tesseract.setLanguage("deu+eng");
+        tesseract.setDatapath(datapath);
+        tesseract.setLanguage(language);
     }
 
     @Override
