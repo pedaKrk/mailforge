@@ -47,7 +47,7 @@ public class BodyParserImpl implements BodyParser {
         boolean inline = isInlineDisposition(entity);
 
         if (isAttachment(entity)){
-            byte[] data = readBinaryBody(entity);
+            byte[] data = readBodyBytes(entity);
             result.attachments.add(new ParsedAttachmentDto(
                     UUID.randomUUID().toString(),
                     filename,
@@ -93,14 +93,20 @@ public class BodyParserImpl implements BodyParser {
         }
     }
 
-    private byte[] readBinaryBody(Entity entity) throws EmailParsingError {
+    private byte[] readBodyBytes(Entity entity) throws EmailParsingError {
         try {
             if (entity.getBody() instanceof BinaryBody binaryBody) {
                 try (InputStream inputStream = binaryBody.getInputStream()) {
                     return inputStream.readAllBytes();
                 }
             }
-            throw new EmailParsingError("Attachment body is not a BinaryBody");
+
+            if (entity.getBody() instanceof TextBody textBody){
+                try (InputStream inputStream = textBody.getInputStream()) {
+                    return inputStream.readAllBytes();
+                }
+            }
+            throw new EmailParsingError("Unsupported attachment body type: " + entity.getBody().getClass().getName());
         }
         catch (IOException e) {
             throw new EmailParsingError("Error reading attachment body: " + e.getMessage(), e);

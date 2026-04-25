@@ -1,5 +1,6 @@
 package mailforge.service.parse;
 
+import io.micronaut.core.util.StringUtils;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import mailforge.service.parse.dto.BodyParserResult;
@@ -57,14 +58,25 @@ public class EmailParsingServiceImpl implements EmailParsingService {
     }
 
     private List<String> extractMailboxList(MailboxList mailboxList){
+        if (mailboxList == null) {
+            return List.of();
+        }
+
         List<String> addresses = new ArrayList<>();
         for(Mailbox mailbox : mailboxList){
-            addresses.add(extractMailbox(mailbox));
+            String address = extractMailbox(mailbox);
+            if (address == null){
+                continue;
+            }
+            addresses.add(address);
         }
         return addresses;
     }
 
     private String extractMailbox(Mailbox mailbox){
+        if(mailbox == null){
+            return null;
+        }
         return mailbox.getAddress();
     }
 
