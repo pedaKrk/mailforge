@@ -1,4 +1,4 @@
-package mailforge.service;
+package mailforge.service.ai;
 
 import mailforge.service.parse.dto.ParsedEmailDto;
 

@@ -21,7 +21,8 @@ dependencies {
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 
     // Source: https://mvnrepository.com/artifact/org.projectlombok/lombok
-    implementation("org.projectlombok:lombok:1.18.44")
+    compileOnly("org.projectlombok:lombok:1.18.44")
+    annotationProcessor("org.projectlombok:lombok:1.18.44")
 
     // Source: https://mvnrepository.com/artifact/commons-io/commons-io
     implementation("commons-io:commons-io:2.21.0")
@@ -33,6 +34,9 @@ dependencies {
     implementation("org.apache.pdfbox:pdfbox:3.0.7")
     // Source: https://mvnrepository.com/artifact/net.sourceforge.tess4j/tess4j
     implementation("net.sourceforge.tess4j:tess4j:5.18.0")
+
+    // Source: https://mvnrepository.com/artifact/org.slf4j/slf4j-api
+    implementation("org.slf4j:slf4j-api:2.0.17")
 }
 
 

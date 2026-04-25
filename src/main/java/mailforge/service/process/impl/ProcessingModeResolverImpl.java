@@ -17,11 +17,11 @@ public class ProcessingModeResolverImpl implements ProcessingModeResolver {
         if(attachment.inline()){
             return ProcessingMode.SKIP;
         }
-        if(attachment.size() <= 0){
+        if(attachment.sizeBytes() <= 0){
             return ProcessingMode.EMPTY;
         }
 
-        return MediaType.forExtension(FilenameUtils.getExtension(attachment.originalFilename()))
+        return MediaType.forExtension(FilenameUtils.getExtension(attachment.filename()))
                 .map(this::mapMediaTypeToProcessingMode)
                 .orElse(ProcessingMode.UNSUPPORTED);
     }

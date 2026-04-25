@@ -35,6 +35,9 @@ public class AttachmentStorageServiceImpl implements AttachmentStorageService {
                     attachment.mimeType(),
                     attachment.sizeBytes(),
                     attachment.inline(),
+                    attachment.contentId(),
+                    attachment.contentDisposition(),
+                    attachment.contentTransferEncoding(),
                     sha256,
                     targetPath.toAbsolutePath().toString()
             );

@@ -5,7 +5,7 @@ import io.micronaut.http.MediaType;
 import io.micronaut.http.annotation.*;
 import io.micronaut.http.multipart.CompletedFileUpload;
 import mailforge.service.parse.EmailParsingService;
-import mailforge.service.PythonProcessService;
+import mailforge.service.ai.PythonProcessService;
 import mailforge.service.parse.dto.ParsedEmailDto;
 import mailforge.service.parse.error.EmailParsingError;
 import mailforge.service.process.AttachmentProcessingService;

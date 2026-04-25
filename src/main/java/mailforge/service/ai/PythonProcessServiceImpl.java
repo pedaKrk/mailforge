@@ -1,4 +1,4 @@
-package mailforge.service;
+package mailforge.service.ai;
 
 import io.micronaut.serde.ObjectMapper;
 import jakarta.inject.Singleton;
@@ -8,7 +8,7 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 
 @Singleton
-public class PythonProcessServiceImpl implements PythonProcessService{
+public class PythonProcessServiceImpl implements PythonProcessService {
 
     private final ObjectMapper objectMapper;
 
