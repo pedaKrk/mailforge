@@ -63,6 +63,7 @@ public class EmailController {
 
             /*
              Todo:
+                - implement logging
                 - compare with ground truth and create Metrics
                 - finalize result and return
             */
