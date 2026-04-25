@@ -4,8 +4,10 @@ import io.micronaut.http.HttpResponse;
 import io.micronaut.http.MediaType;
 import io.micronaut.http.annotation.*;
 import io.micronaut.http.multipart.CompletedFileUpload;
+import mailforge.service.ai.AiClient;
 import mailforge.service.ai.AiInputPrepareService;
 import mailforge.service.ai.dto.input.AiEmailInputDto;
+import mailforge.service.ai.dto.output.AiAnalysisResultDto;
 import mailforge.service.parse.EmailParsingService;
 import mailforge.service.parse.dto.ParsedEmailDto;
 import mailforge.service.parse.error.EmailParsingError;
@@ -26,12 +28,14 @@ public class EmailController {
     private final AttachmentStorageService attachmentStorageService;
     private final AttachmentProcessingService attachmentProcessingService;
     private final AiInputPrepareService aiInputPrepareService;
+    private final AiClient aiClient;
 
-    public EmailController(EmailParsingService emailParsingService, AttachmentStorageService attachmentStorageService, AttachmentProcessingService attachmentProcessingService, AiInputPrepareService aiInputPrepareService) {
+    public EmailController(EmailParsingService emailParsingService, AttachmentStorageService attachmentStorageService, AttachmentProcessingService attachmentProcessingService, AiInputPrepareService aiInputPrepareService, AiClient aiClient) {
         this.emailParsingService = emailParsingService;
         this.attachmentStorageService = attachmentStorageService;
         this.attachmentProcessingService = attachmentProcessingService;
         this.aiInputPrepareService = aiInputPrepareService;
+        this.aiClient = aiClient;
     }
 
     @Post(value = "/analyze", consumes = MediaType.MULTIPART_FORM_DATA, produces = MediaType.APPLICATION_JSON)
@@ -55,8 +59,15 @@ public class EmailController {
             }
 
             AiEmailInputDto aiEmailInput = aiInputPrepareService.prepare(parsedEmail, parsedAttachments);
+            AiAnalysisResultDto aiAnalysisResult = aiClient.analyze(aiEmailInput);
 
-            return HttpResponse.ok(parsedAttachments);
+            /*
+             Todo:
+                - compare with ground truth and create Metrics
+                - finalize result and return
+            */
+
+            return HttpResponse.ok(aiAnalysisResult);
         } catch (EmailParsingError e) {
             return HttpResponse.serverError("Failed to parse email: " + e.getMessage());
         }
