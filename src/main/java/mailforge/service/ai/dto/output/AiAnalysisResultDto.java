@@ -10,6 +10,7 @@ import java.util.List;
 public record AiAnalysisResultDto(
         EmailClassificationDto emailClassification,
         List<AttachmentClassificationDto> attachmentClassifications,
+        List<String> keywords,
         List<ContactDto> contacts,
         List<SemanticLinkDto> semanticLinks
 ) {}
