@@ -55,7 +55,7 @@ public class AttachmentProcessingServiceImpl implements AttachmentProcessingServ
                     }
                     String ocrText = ocrExtractionService.extract(attachment);
                     boolean extracted = hasText(ocrText);
-                    yield buildResult(attachment, ProcessingMode.PDF, extracted, true, ocrText, extracted ? null : "PDF contained no extractable text and OCR returned no text");
+                    yield buildResult(attachment, ProcessingMode.OCR, extracted, true, ocrText, extracted ? null : "PDF contained no extractable text and OCR returned no text");
                 }
                 case OCR -> {
                     String ocrText = ocrExtractionService.extract(attachment);
