@@ -15,6 +15,7 @@ import java.util.*;
 
 @Singleton
 public class QualityMetricsServiceImpl implements QualityMetricsService{
+
     @Override
     public QualityMetricsDto evaluate(ParsedEmailDto email, List<ProcessedAttachmentDto> attachments, AiAnalysisResultDto aiResult, GroundTruthDto groundTruth) throws QualityMetricsException {
         return new QualityMetricsDto(
