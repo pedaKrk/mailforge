@@ -25,7 +25,7 @@ public class GroundTruthServiceImpl implements GroundTruthService{
 
     @Override
     public Optional<GroundTruthDto> findByMessageId(String messageId) {
-        Path filePath = datapath.resolve(messageId + ".json");
+        Path filePath = datapath.resolve(sanitizeMessageId(messageId) + ".json");
 
         if (!Files.exists(filePath)){
             return Optional.empty();
@@ -35,8 +35,15 @@ public class GroundTruthServiceImpl implements GroundTruthService{
             GroundTruthDto groundTruth = objectMapper.readValue(Files.readAllBytes(filePath), GroundTruthDto.class);
             return Optional.of(groundTruth);
         } catch (IOException e) {
-            log.error("error reading ground truth for <{}>", messageId);
+            log.error("error reading ground truth for {}", messageId);
             return Optional.empty();
         }
+    }
+
+    private String sanitizeMessageId(String messageId){
+        if(messageId == null){
+            return "";
+        }
+        return messageId.replaceAll("[<>]", "");
     }
 }

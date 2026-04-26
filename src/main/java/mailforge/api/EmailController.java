@@ -17,6 +17,8 @@ import mailforge.service.quality.GroundTruthService;
 import mailforge.service.quality.QualityMetricsService;
 import mailforge.service.quality.dto.GroundTruthDto;
 import mailforge.service.quality.dto.QualityMetricsDto;
+import mailforge.service.result.FinalResultAssembler;
+import mailforge.service.result.dto.FinalAnalysisDto;
 import mailforge.service.storage.AttachmentStorageService;
 import mailforge.service.storage.dto.StoredAttachmentDto;
 import org.apache.commons.io.FilenameUtils;
@@ -26,6 +28,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+/*
+ Todo:
+    - implement logging
+    - define ground truth
+*/
 @Controller("/email")
 public class EmailController {
 
@@ -36,8 +43,9 @@ public class EmailController {
     private final AiClient aiClient;
     private final GroundTruthService groundTruthService;
     private final QualityMetricsService qualityMetricsService;
+    private final FinalResultAssembler finalResultAssembler;
 
-    public EmailController(EmailParsingService emailParsingService, AttachmentStorageService attachmentStorageService, AttachmentProcessingService attachmentProcessingService, AiInputPrepareService aiInputPrepareService, AiClient aiClient, GroundTruthService groundTruthService, QualityMetricsService qualityMetricsService) {
+    public EmailController(EmailParsingService emailParsingService, AttachmentStorageService attachmentStorageService, AttachmentProcessingService attachmentProcessingService, AiInputPrepareService aiInputPrepareService, AiClient aiClient, GroundTruthService groundTruthService, QualityMetricsService qualityMetricsService, FinalResultAssembler finalResultAssembler) {
         this.emailParsingService = emailParsingService;
         this.attachmentStorageService = attachmentStorageService;
         this.attachmentProcessingService = attachmentProcessingService;
@@ -45,6 +53,7 @@ public class EmailController {
         this.aiClient = aiClient;
         this.groundTruthService = groundTruthService;
         this.qualityMetricsService = qualityMetricsService;
+        this.finalResultAssembler = finalResultAssembler;
     }
 
     @Post(value = "/analyze", consumes = MediaType.MULTIPART_FORM_DATA, produces = MediaType.APPLICATION_JSON)
@@ -74,14 +83,10 @@ public class EmailController {
             QualityMetricsDto qualityMetricsDto = groundTruth
                     .map(gt -> qualityMetricsService.evaluate(parsedEmail, parsedAttachments, aiAnalysisResult, gt))
                     .orElseGet(() -> QualityMetricsDto.skipped("No ground truth found for messageId: " + parsedEmail.headers().messageId()));
-            /*
-             Todo:
-                - implement logging
-                - compare with ground truth and create Metrics
-                - finalize result and return
-            */
 
-            return HttpResponse.ok(aiAnalysisResult);
+            FinalAnalysisDto result = finalResultAssembler.assemble(parsedEmail, parsedAttachments, aiAnalysisResult, qualityMetricsDto);
+
+            return HttpResponse.ok(result);
         } catch (EmailParsingError e) {
             return HttpResponse.serverError("Failed to parse email: " + e.getMessage());
         }

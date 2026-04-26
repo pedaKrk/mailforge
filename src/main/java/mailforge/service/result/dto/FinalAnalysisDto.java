@@ -1,0 +1,18 @@
+package mailforge.service.result.dto;
+
+import io.micronaut.core.annotation.Introspected;
+import io.micronaut.serde.annotation.Serdeable;
+import mailforge.service.ai.dto.output.AiAnalysisResultDto;
+import mailforge.service.parse.dto.ParsedEmailDto;
+import mailforge.service.quality.dto.QualityMetricsDto;
+
+import java.util.List;
+
+@Introspected
+@Serdeable
+public record FinalAnalysisDto(
+        FinalEmailAnalysisDto email,
+        List<FinalAttachmentAnalysisDto> attachments,
+        AiAnalysisResultDto aiAnalysis,
+        QualityMetricsDto qualityMetrics
+) {}
