@@ -5,9 +5,7 @@ import mailforge.service.ai.dto.output.AiAnalysisResultDto;
 import mailforge.service.parse.dto.ParsedEmailDto;
 import mailforge.service.process.dto.ProcessedAttachmentDto;
 import mailforge.service.quality.dto.QualityMetricsDto;
-import mailforge.service.result.dto.FinalAttachmentAnalysisDto;
-import mailforge.service.result.dto.FinalAnalysisDto;
-import mailforge.service.result.dto.FinalEmailAnalysisDto;
+import mailforge.service.result.dto.*;
 
 import java.util.List;
 
@@ -17,8 +15,18 @@ public class FinalResultAssemblerImpl implements FinalResultAssembler{
     @Override
     public FinalAnalysisDto assemble(ParsedEmailDto email, List<ProcessedAttachmentDto> attachments, AiAnalysisResultDto aiAnalysis, QualityMetricsDto qualityMetrics) {
         return new FinalAnalysisDto(
-                new FinalEmailAnalysisDto(email.headers()),
-                attachments.stream().map(attachment -> new FinalAttachmentAnalysisDto(
+                new FinalEmailAnalysisDto(email.headers(), email.body()),
+                attachments,
+                aiAnalysis,
+                qualityMetrics
+        );
+    }
+
+    @Override
+    public FinalAnalysisSmallDto assembleSmall(ParsedEmailDto email, List<ProcessedAttachmentDto> attachments, AiAnalysisResultDto aiAnalysis, QualityMetricsDto qualityMetrics) {
+        return new FinalAnalysisSmallDto(
+                new FinalEmailAnalysisSmallDto(email.headers()),
+                attachments.stream().map(attachment -> new FinalAttachmentAnalysisSmallDto(
                         attachment.attachmentId(),
                         attachment.filename(),
                         attachment.mimeType(),

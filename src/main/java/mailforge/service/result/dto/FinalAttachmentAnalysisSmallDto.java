@@ -6,7 +6,7 @@ import mailforge.service.process.dto.ProcessingMode;
 
 @Introspected
 @Serdeable
-public record FinalAttachmentAnalysisDto(
+public record FinalAttachmentAnalysisSmallDto(
         String attachmentId,
         String filename,
         String mimeType,

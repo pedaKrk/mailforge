@@ -19,6 +19,7 @@ import mailforge.service.quality.dto.GroundTruthDto;
 import mailforge.service.quality.dto.QualityMetricsDto;
 import mailforge.service.result.FinalResultAssembler;
 import mailforge.service.result.dto.FinalAnalysisDto;
+import mailforge.service.result.dto.FinalAnalysisSmallDto;
 import mailforge.service.storage.AttachmentStorageService;
 import mailforge.service.storage.dto.StoredAttachmentDto;
 import org.apache.commons.io.FilenameUtils;
@@ -85,6 +86,45 @@ public class EmailController {
                     .orElseGet(() -> QualityMetricsDto.skipped("No ground truth found for messageId: " + parsedEmail.headers().messageId()));
 
             FinalAnalysisDto result = finalResultAssembler.assemble(parsedEmail, parsedAttachments, aiAnalysisResult, qualityMetricsDto);
+
+            return HttpResponse.ok(result);
+        } catch (EmailParsingError e) {
+            return HttpResponse.serverError("Failed to parse email: " + e.getMessage());
+        }
+        catch (Exception e){
+            return HttpResponse.serverError("Failed to analyze  email: " + e.getMessage());
+        }
+    }
+
+    @Post(value = "/analyze-small", consumes = MediaType.MULTIPART_FORM_DATA, produces = MediaType.APPLICATION_JSON)
+    public HttpResponse<?> analyzeSmall(CompletedFileUpload file) {
+        if(file == null || file.getSize() == 0) {
+            return HttpResponse.badRequest("No file uploaded");
+        }
+        if (!"eml".equalsIgnoreCase(FilenameUtils.getExtension(file.getFilename()))) {
+            return HttpResponse.badRequest("Only .eml files are supported");
+        }
+
+        try (InputStream inputStream = file.getInputStream()){
+            ParsedEmailDto parsedEmail = emailParsingService.parse(inputStream);
+
+            List<ProcessedAttachmentDto> parsedAttachments = new ArrayList<>();
+            for(var attachment : parsedEmail.attachments()){
+                StoredAttachmentDto storedAttachment = attachmentStorageService.store(attachment);
+                ProcessedAttachmentDto processedAttachment = attachmentProcessingService.process(storedAttachment);
+
+                parsedAttachments.add(processedAttachment);
+            }
+
+            AiEmailInputDto aiEmailInput = aiInputPrepareService.prepare(parsedEmail, parsedAttachments);
+            AiAnalysisResultDto aiAnalysisResult = aiClient.analyze(aiEmailInput);
+
+            Optional<GroundTruthDto> groundTruth = groundTruthService.findByMessageId(parsedEmail.headers().messageId());
+            QualityMetricsDto qualityMetricsDto = groundTruth
+                    .map(gt -> qualityMetricsService.evaluate(parsedEmail, parsedAttachments, aiAnalysisResult, gt))
+                    .orElseGet(() -> QualityMetricsDto.skipped("No ground truth found for messageId: " + parsedEmail.headers().messageId()));
+
+            FinalAnalysisSmallDto result = finalResultAssembler.assembleSmall(parsedEmail, parsedAttachments, aiAnalysisResult, qualityMetricsDto);
 
             return HttpResponse.ok(result);
         } catch (EmailParsingError e) {

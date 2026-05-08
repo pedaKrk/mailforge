@@ -3,6 +3,7 @@ package mailforge.service.result.dto;
 import io.micronaut.core.annotation.Introspected;
 import io.micronaut.serde.annotation.Serdeable;
 import mailforge.service.ai.dto.output.AiAnalysisResultDto;
+import mailforge.service.process.dto.ProcessedAttachmentDto;
 import mailforge.service.quality.dto.QualityMetricsDto;
 
 import java.util.List;
@@ -11,7 +12,7 @@ import java.util.List;
 @Serdeable
 public record FinalAnalysisDto(
         FinalEmailAnalysisDto email,
-        List<FinalAttachmentAnalysisDto> attachments,
+        List<ProcessedAttachmentDto> attachments,
         AiAnalysisResultDto aiAnalysis,
         QualityMetricsDto qualityMetrics
 ) {}
