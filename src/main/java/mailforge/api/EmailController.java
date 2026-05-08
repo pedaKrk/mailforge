@@ -19,7 +19,7 @@ import mailforge.service.quality.dto.GroundTruthDto;
 import mailforge.service.quality.dto.QualityMetricsDto;
 import mailforge.service.result.FinalResultAssembler;
 import mailforge.service.result.dto.FinalAnalysisDto;
-import mailforge.service.result.dto.FinalAnalysisSmallDto;
+import mailforge.service.result.dto.CompactFinalAnalysisDto;
 import mailforge.service.storage.AttachmentStorageService;
 import mailforge.service.storage.dto.StoredAttachmentDto;
 import org.apache.commons.io.FilenameUtils;
@@ -124,7 +124,7 @@ public class EmailController {
                     .map(gt -> qualityMetricsService.evaluate(parsedEmail, parsedAttachments, aiAnalysisResult, gt))
                     .orElseGet(() -> QualityMetricsDto.skipped("No ground truth found for messageId: " + parsedEmail.headers().messageId()));
 
-            FinalAnalysisSmallDto result = finalResultAssembler.assembleSmall(parsedEmail, parsedAttachments, aiAnalysisResult, qualityMetricsDto);
+            CompactFinalAnalysisDto result = finalResultAssembler.assembleCompact(parsedEmail, parsedAttachments, aiAnalysisResult, qualityMetricsDto);
 
             return HttpResponse.ok(result);
         } catch (EmailParsingError e) {

@@ -23,10 +23,10 @@ public class FinalResultAssemblerImpl implements FinalResultAssembler{
     }
 
     @Override
-    public FinalAnalysisSmallDto assembleSmall(ParsedEmailDto email, List<ProcessedAttachmentDto> attachments, AiAnalysisResultDto aiAnalysis, QualityMetricsDto qualityMetrics) {
-        return new FinalAnalysisSmallDto(
-                new FinalEmailAnalysisSmallDto(email.headers()),
-                attachments.stream().map(attachment -> new FinalAttachmentAnalysisSmallDto(
+    public CompactFinalAnalysisDto assembleCompact(ParsedEmailDto email, List<ProcessedAttachmentDto> attachments, AiAnalysisResultDto aiAnalysis, QualityMetricsDto qualityMetrics) {
+        return new CompactFinalAnalysisDto(
+                new CompactFinalEmailAnalysisDto(email.headers()),
+                attachments.stream().map(attachment -> new CompactFinalAttachmentAnalysisDto(
                         attachment.attachmentId(),
                         attachment.filename(),
                         attachment.mimeType(),

@@ -5,9 +5,9 @@ import mailforge.service.quality.dto.QualityMetricsDto;
 
 import java.util.List;
 
-public record FinalAnalysisSmallDto(
-        FinalEmailAnalysisSmallDto email,
-        List<FinalAttachmentAnalysisSmallDto> attachments,
+public record CompactFinalAnalysisDto(
+        CompactFinalEmailAnalysisDto email,
+        List<CompactFinalAttachmentAnalysisDto> attachments,
         AiAnalysisResultDto aiAnalysis,
         QualityMetricsDto qualityMetrics
 ) {}
