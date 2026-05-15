@@ -43,24 +43,24 @@ public class AttachmentProcessingServiceImpl implements AttachmentProcessingServ
                 case SKIP -> buildResult(attachment, ProcessingMode.SKIP, false, false, null, "Inline attachment skipped");
                 case EMPTY -> buildResult(attachment, ProcessingMode.EMPTY, false, false, null, "Attachment is empty");
                 case UNSUPPORTED -> buildResult(attachment, ProcessingMode.UNSUPPORTED, false, false, null, "Unsupported attachment type");
-                case TEXT -> {
+                case DIRECT_TEXT -> {
                     String text = textExtractionService.extract(attachment);
                     boolean extracted = hasText(text);
-                    yield buildResult(attachment, ProcessingMode.TEXT, extracted, false, text, extracted ? null : "Text extraction returned no text");
+                    yield buildResult(attachment, ProcessingMode.DIRECT_TEXT, extracted, false, text, extracted ? null : "Text extraction returned no text");
                 }
-                case PDF -> {
+                case PDF_TEXT -> {
                     String text = pdfExtractionService.extract(attachment);
                     if(hasText(text)) {
-                        yield buildResult(attachment, ProcessingMode.PDF, true, false, text, null);
+                        yield buildResult(attachment, ProcessingMode.PDF_TEXT, true, false, text, null);
                     }
                     String ocrText = ocrExtractionService.extract(attachment);
                     boolean extracted = hasText(ocrText);
-                    yield buildResult(attachment, ProcessingMode.OCR, extracted, true, ocrText, extracted ? null : "PDF contained no extractable text and OCR returned no text");
+                    yield buildResult(attachment, ProcessingMode.OCR_IMAGE, extracted, true, ocrText, extracted ? null : "PDF contained no extractable text and OCR returned no text");
                 }
-                case OCR -> {
+                case OCR_IMAGE -> {
                     String ocrText = ocrExtractionService.extract(attachment);
                     boolean extracted = hasText(ocrText);
-                    yield buildResult(attachment, ProcessingMode.OCR, extracted, true, ocrText, extracted ? null : "OCR returned no text");
+                    yield buildResult(attachment, ProcessingMode.OCR_IMAGE, extracted, true, ocrText, extracted ? null : "OCR returned no text");
                 }
             };
         } catch (ExtractionException e) {

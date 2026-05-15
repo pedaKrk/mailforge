@@ -6,9 +6,9 @@ import io.micronaut.serde.annotation.Serdeable;
 @Introspected
 @Serdeable
 public enum ProcessingMode {
-    TEXT,
-    PDF,
-    OCR,
+    DIRECT_TEXT,
+    PDF_TEXT,
+    OCR_IMAGE,
     EMPTY,
     SKIP,
     UNSUPPORTED

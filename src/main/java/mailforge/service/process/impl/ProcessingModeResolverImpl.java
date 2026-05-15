@@ -28,15 +28,15 @@ public class ProcessingModeResolverImpl implements ProcessingModeResolver {
 
     private ProcessingMode mapMediaTypeToProcessingMode(MediaType mediaType) {
         if (mediaType.isTextBased()) {
-            return ProcessingMode.TEXT;
+            return ProcessingMode.DIRECT_TEXT;
         }
 
         if (mediaType.equals(MediaType.APPLICATION_PDF_TYPE)) {
-            return ProcessingMode.PDF;
+            return ProcessingMode.PDF_TEXT;
         }
 
         if (IMAGE_ANY.matches(mediaType)) {
-            return ProcessingMode.OCR;
+            return ProcessingMode.OCR_IMAGE;
         }
 
         return ProcessingMode.UNSUPPORTED;
