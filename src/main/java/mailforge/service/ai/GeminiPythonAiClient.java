@@ -24,7 +24,7 @@ public class GeminiPythonAiClient implements AiClient{
     public AiAnalysisResultDto analyze(AiEmailInputDto input) throws AiAnalysisException {
         try {
             ProcessBuilder pb = new ProcessBuilder(
-                    "python3",
+                    "C:\\Users\\peter\\projects\\mailforge\\scripts\\.venv\\Scripts\\python.exe",
                     "scripts/gemini_analyze.py"
             );
 
