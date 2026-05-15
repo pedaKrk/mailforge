@@ -1,0 +1,32 @@
+{
+  "emailHeader": {
+    "messageId": "<b04ef6c6-0841-bc0c-5692-720e25273df0@technikum-wien.at>",
+    "subject": "Re: Antrag Einmalige Studienbeihilfe Peter Karkulik",
+    "date": "2026-04-07T07:47:05Z",
+    "from": [
+      "ma1272@technikum-wien.at"
+    ],
+    "to": [
+      "if23b218@technikum-wien.at"
+    ],
+    "cc": [],
+    "bcc": [],
+    "replyTo": []
+  },
+  "attachments": [
+    {
+      "filename": "Studienbeihilfe_Karkulik.pdf",
+      "mimeType": "application/pdf",
+      "expectedProcessingMode": "OCR_IMAGE",
+      "textExtractionExpected": true,
+      "expectedTextSnippets": [
+        "Formular",
+        "Antrag",
+        "Studien-/Lehrlingsbeihilfe",
+        "FH Technikum Wien",
+        "Karkulik Gerlinde",
+        "Peter Karkulik"
+      ]
+    }
+  ]
+}
