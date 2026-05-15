@@ -4,6 +4,7 @@ import io.micronaut.http.HttpResponse;
 import io.micronaut.http.MediaType;
 import io.micronaut.http.annotation.*;
 import io.micronaut.http.multipart.CompletedFileUpload;
+import lombok.extern.slf4j.Slf4j;
 import mailforge.service.ai.AiClient;
 import mailforge.service.ai.AiInputPrepareService;
 import mailforge.service.ai.dto.input.AiEmailInputDto;
@@ -34,6 +35,8 @@ import java.util.Optional;
     - implement logging
     - define ground truth
 */
+
+@Slf4j
 @Controller("/email")
 public class EmailController {
 
@@ -89,9 +92,11 @@ public class EmailController {
 
             return HttpResponse.ok(result);
         } catch (EmailParsingError e) {
+            log.error("error: {}", e.getMessage(), e);
             return HttpResponse.serverError("Failed to parse email: " + e.getMessage());
         }
         catch (Exception e){
+            log.error("error: {}", e.getMessage(), e);
             return HttpResponse.serverError("Failed to analyze  email: " + e.getMessage());
         }
     }
@@ -128,9 +133,11 @@ public class EmailController {
 
             return HttpResponse.ok(result);
         } catch (EmailParsingError e) {
+            log.error("error: {}", e.getMessage(), e);
             return HttpResponse.serverError("Failed to parse email: " + e.getMessage());
         }
         catch (Exception e){
+            log.error("error: {}", e.getMessage(), e);
             return HttpResponse.serverError("Failed to analyze  email: " + e.getMessage());
         }
     }
@@ -147,6 +154,7 @@ public class EmailController {
         try (InputStream inputStream = file.getInputStream()){
             return HttpResponse.ok(emailParsingService.parse(inputStream));
         } catch (Exception e){
+            log.error("error: {}", e.getMessage(), e);
             return HttpResponse.serverError("Failed to parse email: " + e.getMessage());
         }
     }
