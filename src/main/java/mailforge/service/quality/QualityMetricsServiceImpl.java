@@ -49,7 +49,8 @@ public class QualityMetricsServiceImpl implements QualityMetricsService{
             return 1.0;
         }
 
-        return actualAttachments.size() / (double) expectedAttachments.size();
+        List<ProcessedAttachmentDto> relevantAttachments = actualAttachments.stream().filter(attachment -> !attachment.inline()).toList();
+        return relevantAttachments.size() / (double) expectedAttachments.size();
     }
 
     private Map<String, Double> calculateAttachmentExtractionAccuracy(List<ProcessedAttachmentDto> actualAttachments, List<GroundTruthAttachmentDto> expectedAttachments){
