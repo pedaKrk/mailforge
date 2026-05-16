@@ -1,0 +1,41 @@
+{
+  "emailHeader": {
+    "messageId": "<E1wNVpn-000000068Wr-0ujH@smtp-04-tuk1.steampowered.com>",
+    "subject": "Vielen Dank für Ihren Einkauf bei Steam!",
+    "date": "2026-05-14T13:10:39Z",
+    "from": [
+      "noreply@steampowered.com"
+    ],
+    "to": [
+      "peter.karkulik@gmail.com"
+    ],
+    "cc": [],
+    "bcc": [],
+    "replyTo": [
+      "noreply@steampowered.com"
+    ]
+  },
+  "attachments": [
+    {
+      "filename": "Rückerstattungsrichtlinien.txt",
+      "mimeType": "text/plain",
+      "expectedProcessingMode": "DIRECT_TEXT",
+      "textExtractionExpected": true,
+      "expectedTextSnippets": [
+        "Steam-Rückerstattungen",
+        "Steam-Guthaben"
+      ]
+    },
+    {
+      "filename": "Steam_Nutzungsvertrag.txt",
+      "mimeType": "text/plain",
+      "expectedProcessingMode": "DIRECT_TEXT",
+      "textExtractionExpected": true,
+      "expectedTextSnippets": [
+        "ABONNEMENTVEREINBARUNG",
+        "LIZENZEN",
+        "INHALTE DRITTER"
+      ]
+    }
+  ]
+}
