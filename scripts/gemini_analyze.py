@@ -10,6 +10,9 @@ from pydantic import BaseModel, Field
 load_dotenv()
 client = genai.Client()
 
+sys.stdin.reconfigure(encoding="utf-8")
+sys.stdout.reconfigure(encoding="utf-8")
+sys.stderr.reconfigure(encoding="utf-8")
 
 class Classification(BaseModel):
     label: str

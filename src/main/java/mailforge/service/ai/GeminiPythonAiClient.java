@@ -28,6 +28,9 @@ public class GeminiPythonAiClient implements AiClient{
                     "scripts/gemini_analyze.py"
             );
 
+            pb.environment().put("PYTHONIOENCODING", "utf-8");
+            pb.environment().put("PYTHONUTF8", "1");
+
             Process process = pb.start();
 
             try (var stdin = process.getOutputStream()) {
