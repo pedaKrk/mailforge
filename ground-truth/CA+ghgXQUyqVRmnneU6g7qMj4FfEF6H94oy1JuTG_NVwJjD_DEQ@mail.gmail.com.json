@@ -1,0 +1,30 @@
+{
+  "emailHeader": {
+    "messageId": "<CA+ghgXQUyqVRmnneU6g7qMj4FfEF6H94oy1JuTG_NVwJjD_DEQ@mail.gmail.com>",
+    "subject": "Test Image Attachment",
+    "date": "2026-05-16T13:49:44Z",
+    "from": [
+      "peter.karkulik@gmail.com"
+    ],
+    "to": [
+      "peter.karkulik@gmail.com"
+    ],
+    "cc": [],
+    "bcc": [],
+    "replyTo": []
+  },
+  "attachments": [
+    {
+      "filename": "WhatsApp Image 2026-05-16 at 15.48.03.jpeg",
+      "mimeType": "image/jpeg",
+      "expectedProcessingMode": "OCR_IMAGE",
+      "textExtractionExpected": true,
+      "expectedTextSnippets": [
+        "Invoice",
+        "OLUK-587325",
+        "Peter Karkulik",
+        "Overleaf"
+      ]
+    }
+  ]
+}
