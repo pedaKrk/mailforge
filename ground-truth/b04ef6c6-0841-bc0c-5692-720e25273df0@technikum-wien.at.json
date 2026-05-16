@@ -20,12 +20,11 @@
       "expectedProcessingMode": "OCR_IMAGE",
       "textExtractionExpected": true,
       "expectedTextSnippets": [
-        "Formular",
-        "Antrag",
-        "Studien-/Lehrlingsbeihilfe",
-        "FH Technikum Wien",
-        "Karkulik Gerlinde",
-        "Peter Karkulik"
+        "Studienbeihilfe",
+        "Lehrlingsbeihilfe",
+        "Landesgesundheitsagentur",
+        "Betreuungszentrum Mauer",
+        "Technikum Wien"
       ]
     }
   ]
