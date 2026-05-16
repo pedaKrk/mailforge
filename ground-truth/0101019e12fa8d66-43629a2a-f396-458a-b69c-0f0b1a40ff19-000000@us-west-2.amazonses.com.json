@@ -1,0 +1,42 @@
+{
+  "emailHeader": {
+    "messageId": "<0101019e12fa8d66-43629a2a-f396-458a-b69c-0f0b1a40ff19-000000@us-west-2.amazonses.com>",
+    "subject": "Your receipt from Olive Works LLC #2390-3189",
+    "date": "2026-05-10T17:41:10Z",
+    "from": [
+      "invoice+statements+acct_1NLRYwJiNCVVv7YH@stripe.com"
+    ],
+    "to": [
+      "peter.karkulik@gmail.com"
+    ],
+    "cc": [],
+    "bcc": [],
+    "replyTo": [
+      "support@zerogpt.com"
+    ]
+  },
+  "attachments": [
+    {
+      "filename": "Invoice-3IVZHMS6-0002.pdf",
+      "mimeType": "application/pdf",
+      "expectedProcessingMode": "PDF_TEXT",
+      "textExtractionExpected": true,
+      "expectedTextSnippets": [
+        "Olive Works LLC",
+        "3IVZHMS6-0002",
+        "Invoice"
+      ]
+    },
+    {
+      "filename": "Receipt-2390-3189.pdf",
+      "mimeType": "application/pdf",
+      "expectedProcessingMode": "PDF_TEXT",
+      "textExtractionExpected": true,
+      "expectedTextSnippets": [
+        "Olive Works LLC",
+        "2390-3189",
+        "Receipt"
+      ]
+    }
+  ]
+}
